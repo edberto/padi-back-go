@@ -1,6 +1,10 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"log"
+
+	"github.com/spf13/viper"
+)
 
 type IConfig interface {
 	GetString(key string) string
@@ -14,7 +18,7 @@ func NewConfig(path string) IConfig {
 	viper.SetConfigFile(path)
 
 	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
+		log.Fatalf("Failed to read config file")
 	}
 
 	c := viper.GetViper()
