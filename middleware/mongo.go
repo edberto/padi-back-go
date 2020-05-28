@@ -34,6 +34,6 @@ func SetMongoDBCtx(db *mongo.Database) gin.HandlerFunc {
 	}
 }
 
-func GetMongoDB(c *gin.Context) *mongo.Client {
-	return c.MustGet(mongoDBA).(*mongo.Client)
+func GetMongoDB(c *gin.Context) *mongo.Database {
+	return c.MustGet(mongoDBA).(*mongo.Database)
 }
