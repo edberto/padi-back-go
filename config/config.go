@@ -8,6 +8,7 @@ import (
 
 type IConfig interface {
 	GetString(key string) string
+	GetInt(key string) int
 }
 
 type Config struct {
@@ -30,3 +31,6 @@ func (c Config) GetString(key string) string {
 	return c.Viper.GetString(key)
 }
 
+func (c Config) GetInt(key string) int {
+	return c.Viper.GetInt(key)
+}
