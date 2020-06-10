@@ -6,3 +6,6 @@ database:
     db-name: 
   postgres:
     uri:
+key:
+  access:
+  refresh:
