@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -15,6 +16,7 @@ var userTokenCollection = "user_tokens"
 type IRepository interface {
 	FindOneUser(c *gin.Context, p *FindOneUserParam) (res *User, err error)
 	StoreOneToken(c *gin.Context, p *StoreOneTokenParam) (res primitive.ObjectID, err error)
+	FindOneToken(c *gin.Context, p *FindOneTokenParam) (res *Token, err error)
 	DeleteOneToken(c *gin.Context, p *DeleteOneTokenParam) (err error)
 }
 
@@ -76,6 +78,20 @@ func (r *Repository) StoreOneToken(c *gin.Context, p *StoreOneTokenParam) (res p
 	})
 
 	return result.InsertedID.(primitive.ObjectID), err
+}
+
+type FindOneTokenParam struct {
+	UUID string
+}
+
+func (r *Repository) FindOneToken(c *gin.Context, p *FindOneTokenParam) (res *Token, err error) {
+	res = new(Token)
+
+	db := middleware.GetMongoDB(c)
+	col := db.Collection(userTokenCollection)
+
+	err = col.FindOne(c.Request.Context(), bson.D{{"uuid", (*p).UUID}}).Decode(&res)
+	return res, err
 }
 
 type DeleteOneTokenParam struct {

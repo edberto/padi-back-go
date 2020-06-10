@@ -5,13 +5,14 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/dgrijalva/jwt-go"
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 type IJWT interface {
 	AddClaim(key string, value interface{}) *JWT
 	CreateToken() (token string, err error)
 	ExtractClaims(r *http.Request) (res map[string]interface{}, err error)
+	VerifyToken(tokenString string) (*jwt.Token, error)
 }
 
 type JWT struct {
@@ -46,7 +47,7 @@ func (j *JWT) ExtractClaims(r *http.Request) (res map[string]interface{}, err er
 	res = map[string]interface{}{}
 
 	tokenA := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
-	token, err := j.verifyToken(tokenA)
+	token, err := j.VerifyToken(tokenA)
 	if err != nil {
 		return res, err
 	}
@@ -58,7 +59,7 @@ func (j *JWT) ExtractClaims(r *http.Request) (res map[string]interface{}, err er
 	return claim, err
 }
 
-func (j *JWT) verifyToken(tokenString string) (*jwt.Token, error) {
+func (j *JWT) VerifyToken(tokenString string) (*jwt.Token, error) {
 	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Wrong signing method: %v", token.Header["alg"])

@@ -23,6 +23,7 @@ func Initialize(r *gin.Engine) {
 	{
 		api.POST("/register", register.RegisterHandler)
 		api.POST("/login", session.LoginHandler)
+		api.POST("/refresh", session.RefreshHandler)
 		api.Use(authMW)
 		api.GET("/condition/:label-id", condition.FindLabelHandler)
 

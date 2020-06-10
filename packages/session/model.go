@@ -7,4 +7,7 @@ type User struct {
 }
 
 type Token struct {
+	UUID      string `bson"uuid"`
+	UserID    string `bson"user_id"`
+	ExpiredAt string `bson"expired_at"`
 }
