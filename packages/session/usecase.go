@@ -17,7 +17,7 @@ import (
 type IUsecase interface {
 	Login(c *gin.Context, p *LoginParam) (res *LoginVM, err error)
 	Refresh(c *gin.Context, p *RefreshParam) (res *LoginVM, err error)
-	Logout(c *gin.Context, p *LogoutParam) (res *LogoutVM, err error)
+	Logout(c *gin.Context, p *LogoutParam) (err error)
 }
 
 type Usecase struct {
@@ -160,8 +160,14 @@ func (u *Usecase) Refresh(c *gin.Context, p *RefreshParam) (res *LoginVM, err er
 }
 
 type LogoutParam struct {
+	UUID string
 }
 
-func (u *Usecase) Logout(c *gin.Context, p *LogoutParam) (res *LogoutVM, err error) {
-	return res, err
+func (u *Usecase) Logout(c *gin.Context, p *LogoutParam) (err error) {
+	deleteOneTokenP := new(DeleteOneTokenParam)
+	(*deleteOneTokenP).UUID = (*p).UUID
+
+	err = u.DeleteOneToken(c, deleteOneTokenP)
+
+	return err
 }

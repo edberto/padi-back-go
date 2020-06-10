@@ -51,6 +51,7 @@ func SetTokenMiddleware() gin.HandlerFunc {
 
 		userID, _ := strconv.Atoi(ad.UserID)
 		c.Request = req.WithContext(context.WithValue(req.Context(), "user_id", userID))
+		c.Request = c.Request.WithContext(context.WithValue(req.Context(), "access-uuid", claims["access-uuid"]))
 
 		c.Next()
 	}

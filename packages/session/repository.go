@@ -95,8 +95,13 @@ func (r *Repository) FindOneToken(c *gin.Context, p *FindOneTokenParam) (res *To
 }
 
 type DeleteOneTokenParam struct {
+	UUID string
 }
 
 func (r *Repository) DeleteOneToken(c *gin.Context, p *DeleteOneTokenParam) (err error) {
+	db := middleware.GetMongoDB(c)
+	col := db.Collection(userTokenCollection)
+
+	_, err = col.DeleteOne(c.Request.Context(), bson.D{{"uuid", (*p).UUID}})
 	return err
 }

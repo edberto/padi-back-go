@@ -26,6 +26,7 @@ func Initialize(r *gin.Engine) {
 		api.POST("/refresh", session.RefreshHandler)
 		api.Use(authMW)
 		api.GET("/condition/:label-id", condition.FindLabelHandler)
+		api.DELETE("/logout", session.LogoutHandler)
 
 	}
 }

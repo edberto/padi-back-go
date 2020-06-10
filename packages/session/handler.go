@@ -1,13 +1,13 @@
 package session
 
 import (
-	"fmt"
 	"net/http"
 	"padi-back-go/config"
 	"padi-back-go/helper"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type IHandler interface {
@@ -79,5 +79,19 @@ func (h *Handler) RefreshHandler(c *gin.Context) {
 }
 
 func (h *Handler) LogoutHandler(c *gin.Context) {
+	uuid := c.Request.Context().Value("access-uuid").(string)
+	logoutP := new(LogoutParam)
+	(*logoutP).UUID = uuid
 
+	err := h.Logout(c, logoutP)
+	if err != nil && err == mongo.ErrNoDocuments {
+		c.JSON(http.StatusBadRequest, helper.Wrap(nil, "Token Expired!"))
+		return
+	}
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, helper.Wrap(nil, "Internal Server Error"))
+		return
+	}
+
+	c.JSON(http.StatusOK, helper.Wrap(nil, "Success"))
 }
