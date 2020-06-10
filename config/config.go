@@ -29,3 +29,4 @@ func NewConfig(path string) IConfig {
 func (c Config) GetString(key string) string {
 	return c.Viper.GetString(key)
 }
+
