@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"padi-back-go/config"
 	"padi-back-go/setup"
 )
@@ -10,6 +12,9 @@ func main() {
 
 	r := setup.Setup()
 
-	host := config.GetString("app.host")
-	r.Run(host)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = fmt.Sprint(config.GetInt("app.port"))
+	}
+	r.Run(fmt.Sprint(":", port))
 }
