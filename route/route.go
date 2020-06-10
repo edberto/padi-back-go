@@ -1,6 +1,7 @@
 package route
 
 import (
+	"padi-back-go/middleware"
 	"padi-back-go/packages/condition"
 	"padi-back-go/packages/register"
 	"padi-back-go/packages/session"
@@ -14,12 +15,16 @@ func Initialize(r *gin.Engine) {
 	register := register.NewRegister()
 	session := session.NewSession()
 
+	//middlewares
+	authMW := middleware.SetTokenMiddleware()
+
 	//register routes
 	api := r.Group("")
 	{
 		api.POST("/register", register.RegisterHandler)
-		api.GET("/condition/:label-id", condition.FindLabelHandler)
 		api.POST("/login", session.LoginHandler)
+		api.Use(authMW)
+		api.GET("/condition/:label-id", condition.FindLabelHandler)
 
 	}
 }

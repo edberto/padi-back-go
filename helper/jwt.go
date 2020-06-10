@@ -11,7 +11,7 @@ import (
 type IJWT interface {
 	AddClaim(key string, value interface{}) *JWT
 	CreateToken() (token string, err error)
-	ExtractClaims(r *http.Request) (res *map[string]interface{}, err error)
+	ExtractClaims(r *http.Request) (res map[string]interface{}, err error)
 }
 
 type JWT struct {
@@ -42,7 +42,7 @@ func (j *JWT) CreateToken() (token string, err error) {
 	return t.SignedString([]byte(j.Key))
 }
 
-func (j *JWT) ExtractDetails(r *http.Request) (res map[string]interface{}, err error) {
+func (j *JWT) ExtractClaims(r *http.Request) (res map[string]interface{}, err error) {
 	res = map[string]interface{}{}
 
 	tokenA := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
