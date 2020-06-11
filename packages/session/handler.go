@@ -28,6 +28,7 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 	req := new(LoginR)
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, helper.Wrap(nil, "Bad Request!"))
+		return
 	}
 
 	loginP := new(LoginParam)
@@ -49,6 +50,7 @@ func (h *Handler) RefreshHandler(c *gin.Context) {
 	req := new(RefreshR)
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, helper.Wrap(nil, "Bad Request!"))
+		return
 	}
 
 	cfg := config.NewConfig("config.yaml")

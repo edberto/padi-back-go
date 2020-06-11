@@ -37,6 +37,7 @@ func (h *Handler) InsertOneHandler(c *gin.Context) {
 	req := new(PredictionR)
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, helper.Wrap(nil, "Bad Request!"))
+		return
 	}
 
 	insertOneP := new(InsertOneUCParam)
