@@ -1,5 +1,5 @@
 app:
-  port: 8000
+  port:
 database:
   mongo: 
     uri:
