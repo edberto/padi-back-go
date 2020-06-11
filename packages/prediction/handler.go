@@ -34,5 +34,18 @@ func (h *Handler) FindAllHandler(c *gin.Context) {
 }
 
 func (h *Handler) InsertOneHandler(c *gin.Context) {
+	req := new(PredictionR)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, helper.Wrap(nil, "Bad Request!"))
+	}
 
+	insertOneP := new(InsertOneUCParam)
+	insertOneP.ImagePath, insertOneP.Prediction, insertOneP.UserID = req.ImagePath, req.Prediction, c.Request.Context().Value("user_id").(int)
+	res, err := h.StoreOne(c, insertOneP)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, helper.Wrap(nil, "Internal Server Error!"))
+		return
+	}
+
+	c.JSON(http.StatusOK, helper.Wrap(*res, "Success"))
 }

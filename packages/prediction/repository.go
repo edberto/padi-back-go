@@ -20,9 +20,22 @@ func NewRepository() IRepository {
 }
 
 type InsertOneParam struct {
+	ImagePath  string
+	Prediction int
+	UserID     int
 }
 
 func (r *Repository) InsertOne(c *gin.Context, p *InsertOneParam) (res *UserPrediction, err error) {
+	res = new(UserPrediction)
+
+	q := `
+		INSERT INTO public.predictions (user_id, prediction, image_path) 
+		VALUES ($1, $2, $3)
+		RETURNING user_id, prediction, image_path`
+
+	db := middleware.GetPostgres(c)
+	err = db.QueryRow(q, p.UserID, p.Prediction, p.ImagePath).Scan(&res.UserID, &res.Prediction, &res.ImagePath)
+
 	return res, err
 }
 
