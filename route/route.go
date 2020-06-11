@@ -3,6 +3,7 @@ package route
 import (
 	"padi-back-go/middleware"
 	"padi-back-go/packages/condition"
+	"padi-back-go/packages/prediction"
 	"padi-back-go/packages/register"
 	"padi-back-go/packages/session"
 
@@ -14,6 +15,7 @@ func Initialize(r *gin.Engine) {
 	condition := condition.NewCondition()
 	register := register.NewRegister()
 	session := session.NewSession()
+	prediction := prediction.NewPrediction()
 
 	//middlewares
 	authMW := middleware.SetTokenMiddleware()
@@ -27,6 +29,8 @@ func Initialize(r *gin.Engine) {
 		api.Use(authMW)
 		api.GET("/condition/:label-id", condition.FindLabelHandler)
 		api.DELETE("/logout", session.LogoutHandler)
+		api.GET("/prediction", prediction.FindAllHandler)
+		api.POST("/prediction", prediction.InsertOneHandler)
 
 	}
 }

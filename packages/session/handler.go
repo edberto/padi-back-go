@@ -26,7 +26,9 @@ func NewHandler(u IUsecase) IHandler {
 
 func (h *Handler) LoginHandler(c *gin.Context) {
 	req := new(LoginR)
-	c.ShouldBindJSON(&req)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, helper.Wrap(nil, "Bad Request!"))
+	}
 
 	loginP := new(LoginParam)
 	loginP.Username, loginP.Password = req.Username, req.Password
@@ -45,7 +47,9 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 
 func (h *Handler) RefreshHandler(c *gin.Context) {
 	req := new(RefreshR)
-	c.ShouldBindJSON(&req)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, helper.Wrap(nil, "Bad Request!"))
+	}
 
 	cfg := config.NewConfig("config.yaml")
 	key := cfg.GetString("key.refresh")

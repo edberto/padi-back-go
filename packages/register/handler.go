@@ -27,7 +27,7 @@ func NewHandler(u IUsecase) IHandler {
 func (h Handler) RegisterHandler(c *gin.Context) {
 	req := new(RegisterR)
 
-	if err := c.Bind(&req); err != nil {
+	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, helper.Wrap(nil, "Bad Request!"))
 		return
 	}
