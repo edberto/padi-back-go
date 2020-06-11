@@ -1,6 +1,11 @@
 app:
-  host: http://localhost:8000
+  port: 8000
 database:
   mongo: 
     uri:
     db-name: 
+  postgres:
+    uri:
+key:
+  access:
+  refresh:
